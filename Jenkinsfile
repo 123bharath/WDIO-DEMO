@@ -5,13 +5,13 @@ pipeline{
         stage("build"){
             steps{
                 echo "Installing the dependencies..."
-                sh "npm install"
+                bat "npm install"
             }
         }
         stage("test"){
             steps{
                 echo "Testing in progress..."
-                sh "npx wdio run wdio.conf.js"
+                bat "npx wdio run wdio.conf.js"
             }
         }
         stage('Allure Report') {
