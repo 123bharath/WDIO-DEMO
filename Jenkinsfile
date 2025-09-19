@@ -19,6 +19,7 @@ pipeline{
                 echo "Generating Allure Report..."
                 allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
             }
+        }
         stage("deploy"){
             steps{
                 echo "All steps executed successfully..."
@@ -37,5 +38,4 @@ pipeline{
             echo "Execution is failed..."
         }
     }
-}
 }
