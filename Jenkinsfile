@@ -1,41 +1,72 @@
-pipeline{
+pipeline {
     agent any
 
-    stages{
-        stage("build"){
-            steps{
-                echo "Installing the dependencies..."
+    stages {
+
+        stage("Notify GitHub: Pending") {
+            steps {
+                script {
+                    githubNotify context: 'WDIO Tests', 
+                                 status: 'PENDING', 
+                                 description: 'Tests running', 
+                                 credentialsId: 'github-token-id'
+                }
+            }
+        }
+
+        stage("Build") {
+            steps {
+                echo "Installing dependencies..."
                 bat "npm install"
             }
         }
-        stage("test"){
-            steps{
-                echo "Testing in progress..."
+
+        stage("Test") {
+            steps {
+                echo "Running WDIO tests..."
                 bat "npx wdio run wdio.conf.js"
             }
         }
-        stage('Allure Report') {
+
+        stage("Allure Report") {
             steps {
                 echo "Generating Allure Report..."
                 allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
             }
         }
-        stage("deploy"){
-            steps{
-                echo "All steps executed successfully..."
 
+        stage("Deploy") {
+            steps {
+                echo "All steps executed successfully..."
+            }
+        }
+
+        stage("Notify GitHub: Result") {
+            steps {
+                script {
+                    def buildStatus = currentBuild.currentResult == 'SUCCESS' ? 'SUCCESS' : 'FAILURE'
+                    githubNotify context: 'WDIO Tests', 
+                                 status: buildStatus, 
+                                 description: 'WDIO tests finished', 
+                                 credentialsId: 'github-token-id'
+
+                    if (buildStatus != 'SUCCESS') {
+                        error("WDIO tests failed! Merge blocked by branch protection.")
+                    }
+                }
             }
         }
     }
-    post{
-        always{
+
+    post {
+        always {
             echo "Execution Completed..."
         }
-        success{
-            echo "Execution is successful..."
+        success {
+            echo "Execution Successful!"
         }
-        failure{
-            echo "Execution is failed..."
+        failure {
+            echo "Execution Failed!"
         }
     }
 }

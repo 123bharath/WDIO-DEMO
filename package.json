@@ -18,5 +18,8 @@
     "@wdio/mocha-framework": "^9.19.2",
     "@wdio/spec-reporter": "^9.19.2",
     "rimraf": "^6.0.1"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2"
   }
 }
