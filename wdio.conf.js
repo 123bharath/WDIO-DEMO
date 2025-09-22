@@ -191,6 +191,8 @@ exports.config = {
      * @param {object}         browser      instance of created browser/device session
      */
     // before: function (capabilities, specs) {
+    //     browser.maximizeWindow();
+    //     browser.setTimeout({ 'implicit': 10000 });
     // },
     /**
      * Runs before a WebdriverIO command gets executed.

@@ -8,7 +8,7 @@ describe('My Login application', () => {
 
         await LoginPage.login('tomsmith', 'SuperSecretPassword!')
         // await browser.saveScreenshot('screenshot.png')
-        const screenshot = await browser.takeScreenshot();
+        await browser.takeScreenshot();
         // allure.addAttachment('Failure Screenshot', Buffer.from(screenshot, 'base64'), 'image/png');
 
         await expect(SecurePage.flashAlert).toBeExisting()
