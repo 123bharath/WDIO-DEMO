@@ -4,7 +4,7 @@ const SecurePage = require('../pageobjects/secure.page')
 
 describe('My Login application', () => {
     it('should login with valid credentials', async () => {
-        await LoginPage.open()
+        await LoginPage.opn()
 
         await LoginPage.login('tomsmith', 'SuperSecretPassword!')
         // await browser.saveScreenshot('screenshot.png')
@@ -19,3 +19,5 @@ describe('My Login application', () => {
 // Just commented to check whether the webhooks works after pushing the code to main
 
 //Just commented to check whether the webhooks works after pushing the code to branch and if it fails does it disables
+
+//another to check for failing test case
