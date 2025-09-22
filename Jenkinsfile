@@ -1,16 +1,15 @@
 pipeline {
     agent any
 
-    environment {
-        GITHUB_CREDENTIALS = credentials('github-token-id')
-    }
-
     stages {
 
         stage("Notify GitHub: Pending") {
             steps {
                 script {
-                    githubNotify context: 'WDIO Tests', status: 'PENDING', description: 'Tests running', credentialsId: env.GITHUB_CREDENTIALS
+                    githubNotify context: 'WDIO Tests', 
+                                 status: 'PENDING', 
+                                 description: 'Tests running', 
+                                 credentialsId: 'github-token-id'
                 }
             }
         }
@@ -46,7 +45,10 @@ pipeline {
             steps {
                 script {
                     def buildStatus = currentBuild.currentResult == 'SUCCESS' ? 'SUCCESS' : 'FAILURE'
-                    githubNotify context: 'WDIO Tests', status: buildStatus, description: 'WDIO tests finished', credentialsId: env.GITHUB_CREDENTIALS
+                    githubNotify context: 'WDIO Tests', 
+                                 status: buildStatus, 
+                                 description: 'WDIO tests finished', 
+                                 credentialsId: 'github-token-id'
 
                     if (buildStatus != 'SUCCESS') {
                         error("WDIO tests failed! Merge blocked by branch protection.")
