@@ -1,41 +1,42 @@
-pipeline{
-    agent any
+pipeline {
+    agent any   // Runs on any available Jenkins agent
 
-    stages{
-        stage("build"){
-            steps{
-                echo "Installing the dependencies..."
-                bat "npm install"
-            }
-        }
-        stage("test"){
-            steps{
-                echo "Testing in progress..."
-                bat "npx wdio run wdio.conf.js"
-            }
-        }
-        stage('Allure Report') {
+    environment {
+        // Jenkins credential ID that stores your GitHub token
+        GITHUB_TOKEN = credentials('github-token-id')
+    }
+
+    stages {
+        stage('Checkout') {
             steps {
-                echo "Generating Allure Report..."
-                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+                // Check out the source code from the GitHub PR branch
+                checkout scm
             }
         }
-        stage("deploy"){
-            steps{
-                echo "All steps executed successfully..."
 
+        stage('Build') {
+            steps {
+                sh 'echo "Building project..."'
+                sh 'npm install'   // Example build step
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'echo "Running tests..."'
+                sh 'npm test'      // Replace with your test command
             }
         }
     }
-    post{
-        always{
-            echo "Execution Completed..."
+
+    post {
+        success {
+            // ✅ Jenkins automatically reports SUCCESS to GitHub
+            echo 'Build successful. GitHub will allow merge.'
         }
-        success{
-            echo "Execution is successful..."
-        }
-        failure{
-            echo "Execution is failed..."
+        failure {
+            // ❌ Jenkins automatically reports FAILURE to GitHub
+            echo 'Build failed. GitHub will block merge until fixed.'
         }
     }
 }
