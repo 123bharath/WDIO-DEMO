@@ -7,12 +7,12 @@ pipeline {
     // }
 
     stages {
-        // stage('Checkout') {
-        //     steps {
-        //         // Check out the source code from the GitHub PR branch
-        //         checkout scm
-        //     }
-        // }
+        stage('Checkout') {
+            steps {
+                // Check out the source code from the GitHub PR branch
+                checkout scm
+            }
+        }
 
         stage('Build') {
             steps {
