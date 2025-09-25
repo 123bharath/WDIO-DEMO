@@ -1,18 +1,18 @@
 pipeline {
     agent any   // Runs on any available Jenkins agent
 
-    environment {
-        // Jenkins credential ID that stores your GitHub token
-        GITHUB_TOKEN = credentials('github-token-id')
-    }
+    // environment {
+    //     // Jenkins credential ID that stores your GitHub token
+    //     GITHUB_TOKEN = credentials('github-token-id')
+    // }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Check out the source code from the GitHub PR branch
-                checkout scm
-            }
-        }
+        // stage('Checkout') {
+        //     steps {
+        //         // Check out the source code from the GitHub PR branch
+        //         checkout scm
+        //     }
+        // }
 
         stage('Build') {
             steps {
@@ -24,7 +24,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'echo "Running tests..."'
-                sh 'npm test'      // Replace with your test command
+                sh 'npx wdio wdio.conf.js'      // Replace with your test command
             }
         }
     }
