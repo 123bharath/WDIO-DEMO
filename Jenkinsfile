@@ -39,12 +39,12 @@ pipeline{
         success{
             echo "Execution is successful..."
              // Report build success to GitHub
-            githubNotify context: 'Jenkins Build', status: 'SUCCESS'
+            githubNotify context: 'Jenkins Check', status: 'SUCCESS'
         }
         failure{
             echo "Execution is failed..."
             // Report build failure to GitHub
-            githubNotify context: 'Jenkins Build', status: 'FAILURE'
+            githubNotify context: 'Jenkins Check', status: 'FAILURE'
         }
     }
 }
