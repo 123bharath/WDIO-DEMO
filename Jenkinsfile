@@ -17,7 +17,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo "Installing NPM dependencies..."
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
@@ -26,7 +26,7 @@ pipeline {
                 script {
                     try {
                         echo "Running WebdriverIO tests..."
-                        sh 'npx wdio run wdio.conf.js'
+                        bat 'npx wdio run wdio.conf.js'
                         
                         // Notify GitHub that the build succeeded
                         githubNotify context: 'Jenkins Check', status: 'SUCCESS', description: 'All tests passed!'
