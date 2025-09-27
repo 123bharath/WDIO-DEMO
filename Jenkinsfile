@@ -1,42 +1,50 @@
-pipeline {
-    agent any   // Runs on any available Jenkins agent
+pipeline{
+    agent any
 
-    // environment {
-    //     // Jenkins credential ID that stores your GitHub token
-    //     GITHUB_TOKEN = credentials('github-token-id')
-    // }
-
-    stages {
+    stages{
         stage('Checkout') {
             steps {
-                // Check out the source code from the GitHub PR branch
                 checkout scm
             }
         }
-
-        stage('Build') {
-            steps {
-                sh 'echo "Building project..."'
-                sh 'npm install'   // Example build step
+        stage("build"){
+            steps{
+                echo "Installing the dependencies..."
+                bat "npm install"
             }
         }
-
-        stage('Test') {
+        stage("test"){
+            steps{
+                echo "Testing in progress..."
+                bat "npx wdio run wdio.conf.js"
+            }
+        }
+        stage('Allure Report') {
             steps {
-                sh 'echo "Running tests..."'
-                sh 'npx wdio wdio.conf.js'      // Replace with your test command
+                echo "Generating Allure Report..."
+                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+            }
+        }
+        stage("deploy"){
+            steps{
+                echo "All steps executed successfully..."
+
             }
         }
     }
-
-    post {
-        success {
-            // ✅ Jenkins automatically reports SUCCESS to GitHub
-            echo 'Build successful. GitHub will allow merge.'
+    post{
+        always{
+            echo "Execution Completed..."
         }
-        failure {
-            // ❌ Jenkins automatically reports FAILURE to GitHub
-            echo 'Build failed. GitHub will block merge until fixed.'
+        success{
+            echo "Execution is successful..."
+             // Report build success to GitHub
+            githubNotify context: 'Jenkins Build', status: 'SUCCESS'
+        }
+        failure{
+            echo "Execution is failed..."
+            // Report build failure to GitHub
+            githubNotify context: 'Jenkins Build', status: 'FAILURE'
         }
     }
 }
